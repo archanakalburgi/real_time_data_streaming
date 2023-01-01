@@ -1,7 +1,9 @@
 {
   "files": [
+    "../fct_wiki_recentusers.ts",
     "../flow_generated/flow/main.ts",
     "../flow_generated/flow/routes.ts",
-    "../flow_generated/flow/server.ts"
+    "../flow_generated/flow/server.ts",
+    "../flow_generated/types/trial/archana/fct_tables/fct_wiki_recentusers.d.ts"
   ]
 }

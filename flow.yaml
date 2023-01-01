@@ -1,2 +1,49 @@
 ---
-{}
+collections:
+  trial/archana/fct_tables/fct_wiki_recentusers:
+    schema:
+      properties:
+        server_name:
+          type: string
+        type:
+          type: string
+        namespace:
+          type: integer
+        count:
+          reduce:
+            strategy: sum
+          type: integer
+      required:
+        - server_name
+        - type
+        - namespace
+        - count
+      reduce:
+        strategy: merge
+      type: object
+    key:
+      - /server_name
+      - /type
+    
+    derivation:
+      transform:
+        fct_wiki_servers_user_info:
+          source:
+            name: estuary/public/wikipedia/recentchange
+          publish:
+            lambda: typescript
+      typescript:
+        module: fct_wiki_recentusers.ts
+
+materializations:
+  trial/archana/fct_wiki_user_info:
+      endpoint:
+        connector:
+          image: "ghcr.io/estuary/materialize-google-sheets:v2"
+          config: fct_table_sheet.config.yaml
+      bindings:
+        - resource:
+            sheet: commits_one
+          source: trial/archana/fct_tables/fct_wiki_recentusers
+          fields:
+            recommended: true
